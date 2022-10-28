@@ -1,0 +1,38 @@
+
+Sub ShortcutLoader()
+    Dim Target As String
+    Dim exportLocation As String
+    Dim name As String
+    'Target = "C:\Users\skipp\OneDrive\Desktop\resume samples"
+    'Dim  As String
+    'exportLocation = "C:\Users\skipp\OneDrive\Desktop"
+    'name = "testt"
+    'MsgBox ("Target:" & Target & vbNewLine & "exportLocation: " & exportLocation & vbNewLine & "name: " & name)
+    'CreateDesktopShortcut.CreateDesktopShortcut Target, exportLocation, name
+    
+    Dim count As Integer
+    'Dim exportLocation As String
+    
+    count = Range("D2").Value
+    On Error Resume Next 'If error will skip to the next interation of the loop.
+    Dim file As String
+    Dim fileError As String
+    Dim filePathError As String
+    For i = 1 To count
+        Target = Cells(i + 1, 1).Value ' 1 = col A
+        name = Cells(i + 1, 2).Value ' 2 = col C
+        exportLocation = Cells(i + 1, 3).Value ' 3 = col C
+        Cells(i + 1, 9).Value = "Target: " & Target & "|~|" & "exportLocation: " & exportLocation & "|~|" & "name: " & name
+        'MsgBox ("Target: " & Target & vbNewLine & "exportLocation: " & exportLocation & vbNewLine & "name: " & name)
+        CreateDesktopShortcut.CreateDesktopShortcut Target, exportLocation, name
+        Cells(i + 1, 10).Value = CreateDesktopShortcut.Reporting
+        If Err.Number <> 0 Then ' when error is hit the next loop is started.
+            'MsgBox ("Error opening: " & filePathError)
+            'errorCount = errorCount + 1
+            Cells(i + 1, 9).Value = Err
+            Cells(i + 1, 10).Value = "A,B, and C need to have Data."
+            Err.Number = 0 'clears the error cache
+        End If
+    Next i
+
+End Sub
